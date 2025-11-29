@@ -3,465 +3,346 @@ import {
   MapPin, 
   Navigation, 
   CloudSun, 
-  Coffee, 
-  BedDouble, 
-  Car, 
-  Info, 
-  Calendar, 
-  ChevronDown, 
-  ChevronUp, 
   Sun,
   Moon,
   Umbrella,
-  BookOpen
+  Info, 
+  Calendar, 
+  ChevronDown, 
+  ChevronUp,
+  Wind
 } from 'lucide-react';
 
-// --- Data & Configuration ---
+// --- 設定資料 ---
 
 const TRIP_DATA = {
-  title: "湘琴的療癒之旅",
-  dates: "2025.12.30 - 2026.01.01",
-  accommodation: {
-    name: "煙波花蓮太魯閣 - 沁海館",
-    address: "花蓮縣新城鄉順安村草林10之6號",
-    phone: "03-861-2000",
-    checkIn: "15:00",
-    checkOut: "11:00",
-    notes: "沁海館擁有無邊際泳池，記得攜帶泳衣。飯店停車場位於地下室，可直達大廳。",
-    mapQuery: "煙波花蓮太魯閣"
+  title: "湘琴的休日",
+  subtitle: "花蓮太魯閣・山海靜心之旅",
+  dates: "2025.12.30 — 2026.01.01",
+  hotel: {
+    name: "煙波花蓮太魯閣",
+    room: "沁海館",
+    address: "花蓮縣新城鄉順安村草林10之6號"
   },
-  transport_tips: [
-    "蘇花改（台9線）全線速限約 50-70 km/h，區間測速多，請開啟定速。",
-    "連假期間，南下（去程）易壅塞時段為清晨 5:00-7:00；北上（回程）為下午 13:00-17:00。",
-    "長途駕駛建議每 2 小時休息一次，蘇澳服務區與台泥 DAKA 園區是不錯的休息點。",
-    "回程請務必於 15:00 前出發，以免卡在雪隧。"
+  tips: [
+    "蘇花改全線速限 50-70 km/h，請開啟定速。",
+    "連假去程清晨易塞，回程建議 15:00 前出發。",
+    "放慢呼吸，感受山與海的頻率。"
   ]
 };
 
 const ITINERARY = [
   {
     day: 1,
-    date: "12/30 (二)",
-    weather: { icon: "CloudSun", temp: "18°C", desc: "舒適多雲" },
+    date: "12.30",
+    weekday: "Tuesday",
+    weather: { icon: "CloudSun", temp: "18°C", desc: "舒適" },
     events: [
       {
         time: "14:00",
-        title: "台北雙連捷運站 出發",
-        type: "transport",
-        location: "台北市大同區雙連捷運站",
-        desc: "準時出發，開啟美好旅程。沿國道五號經雪隧，轉蘇花改。",
-        guide: "出發前檢查胎壓與油量。雙連附近若需補給，可先至超商購買咖啡與零食。",
-        mapQuery: "雙連捷運站"
+        title: "台北出發",
+        location: "雙連捷運站",
+        desc: "調整心情，準備前往山海之間。",
+        guide: "上國道五號前，確認輪胎與油量。車上播放輕柔的 Jazz 或 Lo-fi 音樂，讓心跳跟著慢下來。",
+        mapQuery: "台北雙連捷運站"
       },
       {
         time: "16:30",
-        title: "蘇澳服務區 / 東澳",
-        type: "rest",
+        title: "中途休憩",
         location: "蘇澳服務區",
-        desc: "中途休息，伸展筋骨，上廁所。",
-        guide: "蘇澳服務區外型像一艘大船，二樓有觀景台。這裡的廁所非常乾淨，是進入蘇花改前的最後大補給站。",
+        desc: "如船一般的休息站，短暫停留。",
+        guide: "二樓有不錯的觀景視野。這裡是進入蘇花改前最後的舒適補給點，建議買杯咖啡提神。",
         mapQuery: "蘇澳服務區"
       },
       {
         time: "19:00",
-        title: "抵達 煙波太魯閣",
-        type: "stay",
-        location: "煙波花蓮太魯閣 沁海館",
-        desc: "辦理入住，卸下行李與疲憊。",
-        guide: "沁海館是煙波集團中較新的館別，主打山海交會的景致。大廳設計採用大量落地窗，即便晚上也能感受空間的通透感。",
+        title: "抵達・入住",
+        location: "煙波太魯閣 沁海館",
+        desc: "卸下行囊，被海風擁抱。",
+        guide: "Check-in 時不妨在大廳停留片刻，欣賞挑高空間的通透感。今晚不急著出門，就在飯店內享受慢食。",
         mapQuery: "煙波花蓮太魯閣"
       },
       {
-        time: "19:30",
-        title: "晚餐：漫饗食堂",
-        type: "food",
-        location: "煙波花蓮太魯閣 漫饗食堂",
-        desc: "享用飯店精緻海陸料理，不用奔波。",
-        guide: "漫饗食堂主打在地食材，推薦嘗試他們的「花蓮曼波魚」料理或原住民風味野菜。",
-        mapQuery: "煙波花蓮太魯閣 漫饗食堂"
-      },
-      {
         time: "21:00",
-        title: "設施體驗：水療與泳池",
-        type: "activity",
-        location: "沁海館 2F",
-        desc: "無邊際泳池、溫水池、烤箱。",
-        guide: "晚上的無邊際泳池雖然看不到海，但打光後的氛圍非常浪漫，且人潮通常比白天少，適合拍照與放鬆。",
+        title: "靜心時刻",
+        location: "水療館 / 無邊際泳池",
+        desc: "在溫水中洗去城市的喧囂。",
+        guide: "夜晚的泳池畔點燈後非常迷人，即便不下水，坐在躺椅上聽海浪聲也是一種極致的療癒。",
         mapQuery: "煙波花蓮太魯閣"
       }
     ]
   },
   {
     day: 2,
-    date: "12/31 (三)",
-    weather: { icon: "Sun", temp: "21°C", desc: "晴朗溫暖" },
+    date: "12.31",
+    weekday: "Wednesday",
+    weather: { icon: "Sun", temp: "21°C", desc: "晴朗" },
     events: [
       {
-        time: "08:30",
-        title: "慢活早午餐",
-        type: "food",
+        time: "09:00",
+        title: "晨間・慢食",
         location: "漫饗食堂",
-        desc: "睡到自然醒，享受煙波著名的 Buffet。",
-        guide: "煙波的早餐素有口碑，營業時間較長，建議可以慢慢吃。必吃「牧羊人派」或現煮的「海鮮粥」。",
+        desc: "睡到自然醒，享用在地豐盛早餐。",
+        guide: "煙波的早餐時段很長，不必趕時間。推薦嘗試花蓮在地的野菜與海鮮粥。",
         mapQuery: "煙波花蓮太魯閣"
       },
       {
         time: "10:30",
-        title: "曼波海灘 散策",
-        type: "sight",
-        location: "曼波海灘",
-        desc: "步行 5 分鐘即達，花蓮的天空之鏡。",
-        guide: "這裡不同於七星潭，人潮較少。海灘上有許多疊石藝術，適合拍攝日系清新風格的照片。建議脫鞋感受圓潤的礫石。",
+        title: "曼波海灘",
+        location: "步行 5 分鐘",
+        desc: "花蓮的天空之鏡，與石疊塔對話。",
+        guide: "這裡的鵝卵石圓潤可愛，可以試著疊石頭許願。記得帶相機，海天一色的背景怎麼拍都充滿空氣感。",
         mapQuery: "曼波海灘"
       },
       {
-        time: "13:00",
-        title: "新城文青午茶",
-        type: "food",
-        location: "練習曲書店 / 新城老街",
-        desc: "車程約 10 分鐘，感受老屋新生的魅力。",
-        guide: "「練習曲書店」只借不賣書，是棒球教練為了偏鄉孩子開的。旁邊的「佳興冰果室」檸檬汁是必買伴手禮，連皮打汁特別香。",
+        time: "14:00",
+        title: "練習曲書店",
+        location: "新城老街",
+        desc: "只借不賣書的書店，老屋裡的咖啡香。",
+        guide: "如果這家店客滿，旁邊的「佳興冰果室」買瓶檸檬汁帶去海邊喝也是不錯的選擇。",
         mapQuery: "練習曲書店"
       },
       {
-        time: "16:00",
-        title: "飯店發呆亭 / 陽台",
-        type: "activity",
-        location: "沁海館",
-        desc: "回飯店休息，享受午後寧靜。",
-        guide: "旅行不一定要填滿行程。在房間陽台泡杯茶，看著太平洋發呆，是最高級的享受。",
-        mapQuery: "煙波花蓮太魯閣"
-      },
-      {
-        time: "22:00",
-        title: "溫馨跨年夜",
-        type: "stay",
-        location: "客房內 / 戶外平台",
-        desc: "告別 2025，迎接 2026。",
-        guide: "太魯閣地區光害較少，天氣好的話，抬頭就能看到滿天星斗。兩個人靜靜地倒數，比人擠人的演唱會更溫馨。",
+        time: "23:50",
+        title: "跨年・倒數",
+        location: "客房陽台",
+        desc: "在太平洋旁，靜靜迎接 2026。",
+        guide: "沒有擁擠的人潮，只有你們與星空。或許可以準備一點小酒，慶祝這一年的努力。",
         mapQuery: "煙波花蓮太魯閣"
       }
     ]
   },
   {
     day: 3,
-    date: "01/01 (四)",
-    weather: { icon: "CloudSun", temp: "19°C", desc: "多雲轉陰" },
+    date: "01.01",
+    weekday: "Thursday",
+    weather: { icon: "CloudSun", temp: "19°C", desc: "多雲" },
     events: [
       {
-        time: "09:00",
-        title: "新年早餐",
-        type: "food",
-        location: "漫饗食堂",
-        desc: "2026年的第一餐，吃飽喝足。",
-        guide: "把握最後的度假時光，可以再去泳池畔拍幾張白天的海景照。",
-        mapQuery: "煙波花蓮太魯閣"
-      },
-      {
-        time: "12:00",
-        title: "退房 / 啟程",
-        type: "transport",
-        location: "煙波花蓮太魯閣",
-        desc: "辦理退房，準備午餐後返程。",
-        guide: "記得檢查充電器、衣物是否遺落在房間。離開前可至櫃檯拿幾顆迎賓糖果。",
+        time: "11:00",
+        title: "退房・告別",
+        location: "煙波太魯閣",
+        desc: "帶著充飽電的身心，準備返程。",
+        guide: "離開前，再看一眼那片海。把這份平靜收進心裡，帶回城市。",
         mapQuery: "煙波花蓮太魯閣"
       },
       {
         time: "15:00",
-        title: "全速返程",
-        type: "transport",
+        title: "返程",
         location: "蘇花改北上",
-        desc: "務必於 15:00 前出發，避開最塞時段。",
-        guide: "回程若精神不濟，建議在台泥 DAKA 園區稍作停留。進入雪隧前請將油箱加滿。",
+        desc: "務必準時出發，避開車潮。",
+        guide: "若精神不濟，台泥 DAKA 園區適合做為中繼站。慢慢開，安全是回家唯一的路。",
         mapQuery: "台泥DAKA園區"
-      },
-      {
-        time: "19:00",
-        title: "抵達 土城",
-        type: "home",
-        location: "土城台北新貴社區",
-        desc: "平安抵達，旅程圓滿結束。",
-        guide: "辛苦了！回到家後先熱敷眼睛，消除駕駛疲勞。",
-        mapQuery: "土城台北新貴社區"
       }
     ]
   }
 ];
 
-// --- Components ---
+// --- 介面元件 ---
 
-const WeatherWidget = ({ weather }) => {
-  const icons = {
-    Sun: <Sun className="w-5 h-5 text-amber-500" />,
-    CloudSun: <CloudSun className="w-5 h-5 text-amber-500" />,
-    Moon: <Moon className="w-5 h-5 text-indigo-400" />,
-    Umbrella: <Umbrella className="w-5 h-5 text-blue-400" />
-  };
-
-  return (
-    <div className="flex items-center gap-2 bg-stone-100/50 px-3 py-1.5 rounded-full border border-stone-200 shadow-sm backdrop-blur-sm">
-      {icons[weather.icon] || icons.CloudSun}
-      <span className="text-sm font-medium text-stone-600">{weather.temp}</span>
-      <span className="text-xs text-stone-400 border-l border-stone-300 pl-2 ml-1">{weather.desc}</span>
-    </div>
-  );
+const WeatherIcon = ({ type }) => {
+  const iconClass = "w-5 h-5 text-stone-400";
+  switch(type) {
+    case 'Sun': return <Sun className={iconClass} />;
+    case 'CloudSun': return <CloudSun className={iconClass} />;
+    case 'Moon': return <Moon className={iconClass} />;
+    default: return <Wind className={iconClass} />;
+  }
 };
 
-const EventCard = ({ event }) => {
-  const [isGuideOpen, setIsGuideOpen] = useState(false);
-
-  const getIcon = (type) => {
-    switch (type) {
-      case 'transport': return <Car className="w-4 h-4" />;
-      case 'food': return <Coffee className="w-4 h-4" />;
-      case 'stay': return <BedDouble className="w-4 h-4" />;
-      case 'sight': return <MapPin className="w-4 h-4" />;
-      case 'home': return <Navigation className="w-4 h-4" />;
-      default: return <Info className="w-4 h-4" />;
-    }
-  };
-
-  const getTypeColor = (type) => {
-    switch (type) {
-      case 'transport': return 'bg-stone-200 text-stone-600';
-      case 'food': return 'bg-orange-100 text-orange-600';
-      case 'stay': return 'bg-indigo-50 text-indigo-600';
-      case 'sight': return 'bg-emerald-50 text-emerald-600';
-      case 'home': return 'bg-stone-800 text-stone-100';
-      default: return 'bg-gray-100 text-gray-600';
-    }
-  };
-
-  const handleNavigate = () => {
-    const query = encodeURIComponent(event.mapQuery || event.location);
-    window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
-  };
-
-  return (
-    <div className="relative pl-6 pb-8 last:pb-0 border-l border-stone-200 ml-4">
-      {/* Timeline Dot */}
-      <div className={`absolute -left-2 top-0 w-4 h-4 rounded-full border-2 border-white shadow-sm ${getTypeColor(event.type)} flex items-center justify-center`}>
-        {/* Simple dot or tiny icon inside */}
-      </div>
-
-      <div className="bg-white rounded-2xl p-4 shadow-sm border border-stone-100 transition-all active:scale-[0.99] hover:shadow-md">
-        
-        {/* Header */}
-        <div className="flex justify-between items-start mb-2">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold tracking-wider text-stone-400 bg-stone-50 px-2 py-1 rounded-md">
-              {event.time}
-            </span>
-            <span className={`p-1 rounded-full ${getTypeColor(event.type)}`}>
-              {getIcon(event.type)}
-            </span>
-          </div>
-          <button 
-            onClick={handleNavigate}
-            className="flex items-center gap-1 text-xs font-semibold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full hover:bg-blue-100 transition-colors"
-          >
-            <Navigation className="w-3 h-3" />
-            導航
-          </button>
-        </div>
-
-        {/* Content */}
-        <h3 className="text-lg font-bold text-stone-800 mb-1">{event.title}</h3>
-        <p className="text-sm text-stone-500 mb-3 leading-relaxed">{event.desc}</p>
-
-        {/* Guide Toggle */}
-        {event.guide && (
-          <div className="mt-3">
-            <button 
-              onClick={() => setIsGuideOpen(!isGuideOpen)}
-              className="flex items-center gap-1 text-xs text-stone-400 hover:text-stone-600 transition-colors w-full"
-            >
-              <BookOpen className="w-3 h-3" />
-              <span>{isGuideOpen ? '收起景點故事' : '查看景點故事'}</span>
-              {isGuideOpen ? <ChevronUp className="w-3 h-3 ml-auto" /> : <ChevronDown className="w-3 h-3 ml-auto" />}
-            </button>
-            
-            {isGuideOpen && (
-              <div className="mt-2 p-3 bg-stone-50 rounded-xl text-xs text-stone-600 leading-relaxed border border-stone-100 animate-in fade-in slide-in-from-top-1">
-                <span className="font-bold text-stone-400 block mb-1">INFO</span>
-                {event.guide}
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-const InfoSection = ({ data }) => (
-  <div className="space-y-6 px-4 pb-24 animate-in fade-in">
-    {/* Hotel Card */}
-    <div className="bg-white rounded-3xl p-6 shadow-sm border border-stone-100">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="p-3 bg-indigo-50 rounded-2xl text-indigo-600">
-          <BedDouble className="w-6 h-6" />
-        </div>
-        <div>
-          <h3 className="font-bold text-lg text-stone-800">住宿資訊</h3>
-          <p className="text-xs text-stone-400">入住兩晚</p>
-        </div>
-      </div>
-      
-      <div className="space-y-3">
-        <div className="block">
-          <p className="text-sm font-semibold text-stone-800">{data.accommodation.name}</p>
-          <p className="text-xs text-stone-500 mt-0.5">{data.accommodation.address}</p>
-        </div>
-        <div className="flex justify-between text-sm border-t border-stone-100 pt-3">
-          <div className="text-center w-1/2 border-r border-stone-100">
-            <span className="block text-xs text-stone-400">Check-in</span>
-            <span className="font-bold text-stone-700">{data.accommodation.checkIn}</span>
-          </div>
-          <div className="text-center w-1/2">
-            <span className="block text-xs text-stone-400">Check-out</span>
-            <span className="font-bold text-stone-700">{data.accommodation.checkOut}</span>
-          </div>
-        </div>
-        <div className="bg-stone-50 p-3 rounded-xl text-xs text-stone-600 mt-2">
-          {data.accommodation.notes}
-        </div>
-        <button 
-          onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.accommodation.address)}`)}
-          className="w-full py-3 bg-stone-800 text-white text-sm font-medium rounded-xl mt-2 active:bg-stone-700"
-        >
-          導航至飯店
-        </button>
-      </div>
-    </div>
-
-    {/* Transport Card */}
-    <div className="bg-white rounded-3xl p-6 shadow-sm border border-stone-100">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="p-3 bg-stone-100 rounded-2xl text-stone-600">
-          <Car className="w-6 h-6" />
-        </div>
-        <div>
-          <h3 className="font-bold text-lg text-stone-800">自駕 / 蘇花改提醒</h3>
-          <p className="text-xs text-stone-400">行車安全第一</p>
-        </div>
-      </div>
-      <ul className="space-y-3">
-        {data.transport_tips.map((tip, idx) => (
-          <li key={idx} className="flex gap-3 text-sm text-stone-600 items-start">
-            <span className="flex-shrink-0 w-1.5 h-1.5 bg-stone-300 rounded-full mt-2" />
-            <span className="leading-relaxed">{tip}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </div>
+const TabButton = ({ isActive, onClick, label, date }) => (
+  <button 
+    onClick={onClick}
+    className={`flex flex-col items-center justify-center py-3 px-6 min-w-[5rem] transition-all duration-500 relative ${
+      isActive ? 'text-stone-800' : 'text-stone-300'
+    }`}
+  >
+    <span className="text-[10px] font-bold tracking-widest uppercase mb-1 font-sans">{label}</span>
+    <span className={`text-lg font-serif transition-transform duration-500 ${isActive ? 'scale-110' : 'scale-100'}`}>
+      {date}
+    </span>
+    {isActive && (
+      <span className="absolute bottom-0 w-1 h-1 bg-stone-800 rounded-full animate-pulse" />
+    )}
+  </button>
 );
 
-// --- Main App Component ---
+const EventItem = ({ event, isLast }) => {
+  const [isOpen, setIsOpen] = useState(false);
 
-export default function App() {
-  const [activeTab, setActiveTab] = useState('itinerary'); // 'itinerary' | 'info'
-  const [currentDay, setCurrentDay] = useState(0);
-
-  // Scroll to top when switching days
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [currentDay]);
+  const handleNav = (e) => {
+    e.stopPropagation();
+    window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.mapQuery)}`, '_blank');
+  };
 
   return (
-    <div className="min-h-screen bg-[#F7F6F2] font-sans text-stone-800 pb-20 selection:bg-stone-200">
+    <div className="relative pl-8 pb-12 group">
+      {/* Timeline Line */}
+      {!isLast && (
+        <div className="absolute left-[5px] top-2 bottom-0 w-[1px] bg-stone-100" />
+      )}
       
-      {/* Sticky Header */}
-      <header className="sticky top-0 z-50 bg-[#F7F6F2]/90 backdrop-blur-md border-b border-stone-200/50 pt-safe-top">
-        <div className="px-6 pt-6 pb-4">
-          <p className="text-xs font-bold text-stone-400 tracking-widest uppercase mb-1">TRAVEL GUIDE</p>
-          <h1 className="text-2xl font-bold text-stone-800">{TRIP_DATA.title}</h1>
-          <p className="text-sm text-stone-500 mt-1 flex items-center gap-1">
-            <Calendar className="w-3 h-3" />
-            {TRIP_DATA.dates}
-          </p>
-        </div>
+      {/* Timeline Dot */}
+      <div className="absolute left-0 top-2 w-[11px] h-[11px] rounded-full border border-stone-300 bg-stone-50 group-hover:bg-stone-200 transition-colors z-10" />
 
-        {/* Day Tabs (Only visible in Itinerary mode) */}
-        {activeTab === 'itinerary' && (
-          <div className="flex px-4 pb-2 gap-2 overflow-x-auto no-scrollbar snap-x">
-            {ITINERARY.map((item, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentDay(index)}
-                className={`snap-start flex-shrink-0 px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
-                  currentDay === index
-                    ? 'bg-stone-800 text-white shadow-md'
-                    : 'bg-white text-stone-500 border border-stone-200'
-                }`}
-              >
-                {item.date}
-              </button>
-            ))}
+      {/* Content */}
+      <div className="animate-in slide-in-from-bottom-2 duration-700">
+        <div className="flex justify-between items-baseline mb-1">
+          <span className="text-xs font-mono text-stone-400 tracking-wider">{event.time}</span>
+          <button 
+            onClick={handleNav}
+            className="text-[10px] text-stone-400 border border-stone-200 px-3 py-1 rounded-full hover:bg-stone-800 hover:text-white transition-all flex items-center gap-1"
+          >
+            <Navigation className="w-3 h-3" />
+            NAV
+          </button>
+        </div>
+        
+        <h3 className="text-lg font-serif text-stone-800 mb-1 leading-snug">{event.title}</h3>
+        <p className="text-sm text-stone-500 font-sans mb-1">{event.location}</p>
+        <p className="text-sm text-stone-400 font-light leading-relaxed">{event.desc}</p>
+
+        {/* Guide Section */}
+        <div className="mt-4">
+          <button 
+            onClick={() => setIsOpen(!isOpen)}
+            className="flex items-center gap-2 text-xs text-stone-400 hover:text-stone-600 transition-colors group/btn"
+          >
+            {isOpen ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+            <span className="tracking-widest uppercase text-[10px]">Guide</span>
+          </button>
+          
+          <div className={`grid transition-[grid-template-rows] duration-500 ease-out ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+            <div className="overflow-hidden">
+              <div className="pt-3 pb-1">
+                <p className="text-xs text-stone-500 leading-6 bg-stone-100/50 p-4 rounded-lg font-light tracking-wide">
+                  {event.guide}
+                </p>
+              </div>
+            </div>
           </div>
-        )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --- 主程式 ---
+
+export default function App() {
+  const [day, setDay] = useState(0);
+  const [view, setView] = useState('trip'); // 'trip' | 'info'
+
+  return (
+    <div className="min-h-screen bg-[#FDFCF8] text-stone-800 font-sans selection:bg-stone-200">
+      
+      {/* 頂部標題區 */}
+      <header className="pt-16 pb-8 px-8">
+        <p className="text-xs font-bold text-stone-400 tracking-[0.2em] uppercase mb-2">Itinerary</p>
+        <h1 className="text-3xl font-serif font-medium text-stone-900 mb-2">{TRIP_DATA.title}</h1>
+        <p className="text-sm text-stone-500 font-light tracking-wide">{TRIP_DATA.subtitle}</p>
       </header>
 
-      {/* Main Content Area */}
-      <main className="pt-4 max-w-md mx-auto">
-        {activeTab === 'itinerary' ? (
-          <div className="px-4 pb-24 animate-in fade-in">
-            {/* Daily Weather Header */}
-            <div className="flex justify-between items-center mb-6 px-2">
-              <h2 className="text-xl font-bold text-stone-700">
-                Day {ITINERARY[currentDay].day}
-              </h2>
-              <WeatherWidget weather={ITINERARY[currentDay].weather} />
+      {/* 日期切換 */}
+      {view === 'trip' && (
+        <div className="sticky top-0 z-50 bg-[#FDFCF8]/95 backdrop-blur-sm border-b border-stone-100 mb-8">
+          <div className="flex justify-center items-center">
+            {ITINERARY.map((d, i) => (
+              <TabButton 
+                key={i}
+                isActive={day === i} 
+                onClick={() => setDay(i)} 
+                label={`DAY 0${d.day}`}
+                date={d.date}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 主要內容區 */}
+      <main className="px-8 pb-32 max-w-lg mx-auto min-h-[60vh]">
+        {view === 'trip' ? (
+          <div key={day} className="animate-in fade-in zoom-in-95 duration-500">
+            {/* 當日天氣 */}
+            <div className="flex items-center gap-3 mb-10 bg-white shadow-sm border border-stone-100/50 p-4 rounded-xl w-max">
+              <WeatherIcon type={ITINERARY[day].weather.icon} />
+              <div className="h-4 w-[1px] bg-stone-200" />
+              <span className="text-sm text-stone-600 font-medium">{ITINERARY[day].weather.temp}</span>
+              <span className="text-xs text-stone-400">{ITINERARY[day].weather.desc}</span>
             </div>
 
-            {/* Timeline */}
-            <div className="mt-2">
-              {ITINERARY[currentDay].events.map((event, idx) => (
-                <EventCard key={idx} event={event} />
+            {/* 行程列表 */}
+            <div className="mt-4">
+              {ITINERARY[day].events.map((event, i) => (
+                <EventItem 
+                  key={i} 
+                  event={event} 
+                  isLast={i === ITINERARY[day].events.length - 1} 
+                />
               ))}
-            </div>
-            
-            <div className="text-center mt-8 mb-4">
-              <p className="text-xs text-stone-300 italic">Enjoy your relax trip</p>
             </div>
           </div>
         ) : (
-          <InfoSection data={TRIP_DATA} />
+          <div className="animate-in slide-in-from-right duration-500 space-y-8 pt-4">
+            <div className="bg-white p-8 rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.03)] border border-stone-50">
+              <h3 className="font-serif text-xl mb-6 text-stone-900">Accommodation</h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="text-[10px] uppercase tracking-widest text-stone-400 block mb-1">Hotel</label>
+                  <p className="text-stone-800">{TRIP_DATA.hotel.name}</p>
+                  <p className="text-stone-500 text-sm">{TRIP_DATA.hotel.room}</p>
+                </div>
+                <div>
+                  <label className="text-[10px] uppercase tracking-widest text-stone-400 block mb-1">Address</label>
+                  <p className="text-stone-600 text-sm font-light">{TRIP_DATA.hotel.address}</p>
+                </div>
+                <button 
+                  onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(TRIP_DATA.hotel.name)}`)}
+                  className="w-full mt-4 py-3 border border-stone-200 text-stone-600 text-xs tracking-widest uppercase hover:bg-stone-800 hover:text-white transition-colors"
+                >
+                  Navigate
+                </button>
+              </div>
+            </div>
+
+            <div className="bg-stone-50 p-8 rounded-2xl border border-stone-100">
+              <h3 className="font-serif text-xl mb-6 text-stone-900">Driving Tips</h3>
+              <ul className="space-y-4">
+                {TRIP_DATA.tips.map((tip, i) => (
+                  <li key={i} className="flex gap-4 text-sm text-stone-600 font-light leading-relaxed">
+                    <span className="font-serif text-stone-300 italic">0{i+1}</span>
+                    {tip}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         )}
       </main>
 
-      {/* Bottom Navigation Bar */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg border-t border-stone-200 pb-safe-bottom z-50">
-        <div className="flex justify-around items-center h-16 max-w-md mx-auto">
-          <button
-            onClick={() => setActiveTab('itinerary')}
-            className={`flex flex-col items-center gap-1 w-full h-full justify-center transition-colors ${
-              activeTab === 'itinerary' ? 'text-stone-800' : 'text-stone-400'
-            }`}
-          >
-            <MapPin className={`w-6 h-6 ${activeTab === 'itinerary' ? 'fill-stone-100' : ''}`} />
-            <span className="text-[10px] font-bold tracking-wide">行程</span>
-          </button>
-          
-          <button
-            onClick={() => setActiveTab('info')}
-            className={`flex flex-col items-center gap-1 w-full h-full justify-center transition-colors ${
-              activeTab === 'info' ? 'text-stone-800' : 'text-stone-400'
-            }`}
-          >
-            <Info className={`w-6 h-6 ${activeTab === 'info' ? 'fill-stone-100' : ''}`} />
-            <span className="text-[10px] font-bold tracking-wide">資訊</span>
-          </button>
-        </div>
+      {/* 底部導航 */}
+      <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-white/50 rounded-full px-2 py-2 flex gap-2 z-50">
+        <button 
+          onClick={() => setView('trip')}
+          className={`px-6 py-3 rounded-full text-xs font-bold tracking-widest transition-all duration-300 ${
+            view === 'trip' ? 'bg-stone-800 text-white shadow-md' : 'text-stone-400 hover:bg-stone-100'
+          }`}
+        >
+          TRIP
+        </button>
+        <button 
+          onClick={() => setView('info')}
+          className={`px-6 py-3 rounded-full text-xs font-bold tracking-widest transition-all duration-300 ${
+            view === 'info' ? 'bg-stone-800 text-white shadow-md' : 'text-stone-400 hover:bg-stone-100'
+          }`}
+        >
+          INFO
+        </button>
       </nav>
       
-      {/* CSS Utility for safe area padding (iPhone) */}
       <style>{`
-        .pt-safe-top { padding-top: env(safe-area-inset-top); }
-        .pb-safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Noto+Serif+TC:wght@400;500&display=swap');
       `}</style>
     </div>
   );
